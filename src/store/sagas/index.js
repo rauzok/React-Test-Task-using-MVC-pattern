@@ -1,16 +1,11 @@
-import {
-  put,
-  takeEvery,
-  select,
-  call,
-  fork
-} from 'redux-saga/effects'
+import { put, takeEvery, select, call } from 'redux-saga/effects'
 import { addUser, deleteUser, getUsers, updateUser } from "../../requests";
 import { UsersActionTypes } from "../reducers/reducerUsers/models";
 import { UserActionsModels, UsersActionsModels } from "../actions/models";
 import { getSelectedUserId } from "../selectors";
 import { getDataFromLS, removeDataFromLS } from "../../utils/localStorage";
 import { EMessages } from "../reducers/reducerMessage/models";
+import { NoticeMessage } from "../../constants/notice.constants";
 
 function* fetchUsersWorker() {
   try {
@@ -28,9 +23,9 @@ function* deleteUserWorker() {
     
     yield call(deleteUser, id);
     yield put({ type: UsersActionTypes.DELETE, id });
-    yield put({ type: EMessages.SUCCESS, value: 'User successfully has been deleted!' });
+    yield put({ type: EMessages.SUCCESS, value: NoticeMessage.DELETED_SUCCESS });
   } catch (e) {
-    yield put({ type: EMessages.ERROR, value: 'User has not been deleted!  Try again!' });
+    yield put({ type: EMessages.ERROR, value: NoticeMessage.DELETED_ERROR });
   }
 }
 
@@ -42,9 +37,9 @@ function* updateUserWorker() {
     removeDataFromLS();
 
     yield put({ type: UsersActionTypes.UPDATE, value: [data] });
-    yield put({ type: EMessages.SUCCESS, value: 'User data successfully has been changed!' });
+    yield put({ type: EMessages.SUCCESS, value: NoticeMessage.UPDATED_SUCCESS });
   } catch (e) {
-    yield put({ type: EMessages.ERROR, value: 'User has not been changed! Try again!' });
+    yield put({ type: EMessages.ERROR, value: NoticeMessage.UPDATED_ERROR });
   }
 }
 
@@ -53,9 +48,9 @@ function* addUserWorker() {
     const { data } = yield call(addUser);
 
     yield put({ type: UsersActionTypes.ADD, value: [data] });
-    yield put({ type: EMessages.SUCCESS, value: 'New user successfully has been added!' });
+    yield put({ type: EMessages.SUCCESS, value: NoticeMessage.ADDED_SUCCESS });
   } catch (e) {
-    yield put({ type: EMessages.ERROR, value: 'New user has not been added! Try again!' });
+    yield put({ type: EMessages.ERROR, value: NoticeMessage.ADDED_ERROR });
   }
 }
 
