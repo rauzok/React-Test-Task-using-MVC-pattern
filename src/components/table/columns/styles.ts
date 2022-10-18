@@ -16,5 +16,4 @@ export const ColumnsWrapper = styled.div`
 `
 
 export const Column = styled.div`
-  cursor: pointer;
 `
