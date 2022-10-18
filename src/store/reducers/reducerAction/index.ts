@@ -1,11 +1,13 @@
-import {IActionData, IActionSate} from "./models";
+import { IActionData } from "./models";
 import { UserActionsModels } from "../../actions/models";
 import { getDataFromLS } from "../../../utils/localStorage";
 
-export const reducerAction = (state = {
+const initialState = {
   click: null,
   value: getDataFromLS(),
-}, action: IActionData) => {
+}
+
+export const reducerAction = (state = initialState, action: IActionData) => {
   switch (action.type) {
     case UserActionsModels.USER_UPDATE:
       return {
@@ -23,6 +25,12 @@ export const reducerAction = (state = {
       return {
         click: UserActionsModels.USER_DELETE,
         value: action.value,
+      };
+
+    case UserActionsModels.DEFAULT:
+      return {
+        click: null,
+        value: state.value
       };
 
     default:

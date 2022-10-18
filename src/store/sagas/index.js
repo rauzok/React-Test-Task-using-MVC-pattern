@@ -24,6 +24,7 @@ function* deleteUserWorker() {
     yield call(deleteUser, id);
     yield put({ type: UsersActionTypes.DELETE, id });
     yield put({ type: EMessages.SUCCESS, value: NoticeMessage.DELETED_SUCCESS });
+    yield put({ type: UserActionsModels.DEFAULT });
   } catch (e) {
     yield put({ type: EMessages.ERROR, value: NoticeMessage.DELETED_ERROR });
   }
@@ -38,6 +39,7 @@ function* updateUserWorker() {
 
     yield put({ type: UsersActionTypes.UPDATE, value: [data] });
     yield put({ type: EMessages.SUCCESS, value: NoticeMessage.UPDATED_SUCCESS });
+    yield put({ type: UserActionsModels.DEFAULT });
   } catch (e) {
     yield put({ type: EMessages.ERROR, value: NoticeMessage.UPDATED_ERROR });
   }

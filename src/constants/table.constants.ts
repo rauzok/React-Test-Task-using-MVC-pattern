@@ -7,3 +7,17 @@ export enum TableHeadWidth {
 }
 
 export type TTableColumnWidth = keyof typeof TableHeadWidth;
+
+const enum ColumnList {
+  ID = 'id',
+  NAME = 'name',
+  AGE = 'age',
+  ABOUT_PERSON = 'aboutPerson'
+}
+
+export const columnsListWithWidth = [
+  { field: ColumnList.ID, width: TableHeadWidth.ID },
+  { field: ColumnList.NAME, width: TableHeadWidth.NAME },
+  { field: ColumnList.AGE, width: TableHeadWidth.AGE },
+  { field: ColumnList.ABOUT_PERSON, width: TableHeadWidth.ABOUT_PERSON },
+]

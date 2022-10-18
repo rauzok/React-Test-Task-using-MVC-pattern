@@ -8,6 +8,7 @@ export interface ITableViewProps {
   deleteUser: Function;
   updateUser: Function;
   editUser: Function;
+  getDefault: Function;
   users: IUserData[];
   message: IActionMessage;
   action: IActionSate;

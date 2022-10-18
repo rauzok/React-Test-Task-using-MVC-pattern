@@ -4,3 +4,5 @@ export interface IUserData {
   age: string;
   aboutPerson: string;
 }
+
+export type TUserDataKeys = 'id' | 'name' | 'age' | 'aboutPerson';

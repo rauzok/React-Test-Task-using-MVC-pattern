@@ -10,3 +10,5 @@ export const deleteUser = (value: IUserData) => ({ type: UserActionsModels.USER_
 export const editUser = (value: IUserData) => ({ type: UserActionsModels.USER_EDIT, value });
 
 export const updateUser = (value: IUserData) => ({ type: UserActionsModels.USER_UPDATE, value });
+
+export const getDefault = () => ({ type: UserActionsModels.DEFAULT });

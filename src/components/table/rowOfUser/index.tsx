@@ -1,57 +1,64 @@
-import { TableHeadWidth } from "../../../constants/table.constants";
+import React from "react";
 import {
   ActionButtons,
   DeleteButton,
   EditButton,
   Wrapper,
-  SaveButton
+  SaveButton,
+  Item
 } from "./styles";
+
 import { IRowOfUserProps } from "./models";
-import { UserActionsModels } from "../../../store/actions/models";
-import React from "react";
 import { Input } from "../input";
+import { setItemIntoLS } from "../../../utils/localStorage";
+import { columnsListWithWidth, TableHeadWidth } from "../../../constants/table.constants";
+import { onSave } from "../../../utils/buttonsClick";
+import { clickTypeCondition, disabledDeleteButton } from "../../../utils/conditions";
 import uniqId from 'uniqid';
-import { getDataFromLS, setItemIntoLS } from "../../../utils/localStorage";
 
-export const RowOfUser = ({ id, name, age, aboutPerson, action, updateUser, editUser, deleteUser }: IRowOfUserProps) => {
-  const clickTypeCondition = (action.click === UserActionsModels.USER_EDIT && id === action.value.id) || localStorage.getItem('id') === id;
-
+export const RowOfUser = ({ user, action, updateUser, editUser, deleteUser, getDefault }: IRowOfUserProps) => {
   const RenderUserData = () => {
-    return clickTypeCondition
-      ? (
+    const UserEditRow = () => {
+      return (
         <>
-          <Input key={uniqId()} defaultValue={action.value.id}  field={'id'} width={TableHeadWidth.ID} />
-          <Input key={uniqId()} defaultValue={action.value.name}  field={'name'} width={TableHeadWidth.NAME} />
-          <Input key={uniqId()} defaultValue={action.value.age}  field={'age'} width={TableHeadWidth.AGE} />
-          <Input key={uniqId()} defaultValue={action.value.aboutPerson}  field={'aboutPerson'} width={TableHeadWidth.ABOUT_PERSON} />
-        </>
-        )
-      : (
-        <>
-          <div style={{ width: TableHeadWidth.ID }}>{id}</div>
-          <div style={{ width: TableHeadWidth.NAME }}>{name}</div>
-          <div style={{ width: TableHeadWidth.AGE }}>{age}</div>
-          <div style={{ width: TableHeadWidth.ABOUT_PERSON }}>{aboutPerson}</div>
+          {columnsListWithWidth.map(({field, width}) =>
+            <Input key={uniqId()} defaultValue={action.value[field]} field={field} width={width}/>)}
         </>
       )
+    }
+
+    const UserViewRow = () => {
+      return (
+        <>
+          {columnsListWithWidth.map(({ field, width}) =>
+            <Item key={uniqId()} style={{ width }}>{user[field]}</Item>)}
+        </>
+      )
+    }
+
+    return clickTypeCondition(action, user) ? <UserEditRow /> : <UserViewRow />
   }
 
   const RenderEditOrSaveButton = () => {
-    return clickTypeCondition
-      ? <SaveButton onClick={() => updateUser(getDataFromLS())}>Save</SaveButton>
-      : <EditButton onClick={() => {
-          editUser({ id, name, age, aboutPerson })
-          setItemIntoLS(id, name, age, aboutPerson)
-        }}>
-          Edit
-        </EditButton>
-  }
+    return clickTypeCondition(action, user)
+      ? <SaveButton onClick={() => onSave(user, getDefault, updateUser)}>Save</SaveButton>
+      : <EditButton
+          onClick={() => {
+            editUser(user)
+            setItemIntoLS(user)}
+          }
+        >Edit</EditButton>
+  };
 
   return (
     <Wrapper>
       <RenderUserData />
       <ActionButtons style={{ width: TableHeadWidth.ACTIONS }}>
-        <DeleteButton onClick={() => deleteUser({ id, name, age, aboutPerson })}>Delete</DeleteButton>
+        <DeleteButton
+          onClick={() => deleteUser(user)}
+          shouldDisable={disabledDeleteButton(action, user)}
+          disabled={disabledDeleteButton(action, user)}
+        >Delete</DeleteButton>
         <RenderEditOrSaveButton />
       </ActionButtons>
     </Wrapper>

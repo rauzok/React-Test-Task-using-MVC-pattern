@@ -1,3 +1,5 @@
+import { IUserData } from "../store/models";
+
 export const getDataFromLS = () => {
   const id = localStorage.getItem('id');
   const name = localStorage.getItem('name');
@@ -20,7 +22,7 @@ export const removeDataFromLS = () => {
 }
 
 
-export const setItemIntoLS = (id: string, name: string, age: string, aboutPerson: string) => {
+export const setItemIntoLS = ({ id, name, age, aboutPerson }: IUserData ) => {
   localStorage.setItem('id', id);
   localStorage.setItem('name', name);
   localStorage.setItem('age', age);

@@ -7,6 +7,7 @@ import {
   addUser,
   deleteUser,
   editUser,
+  getDefault,
   loadUsers,
   updateUser
 } from "../../store/actions";
@@ -26,28 +27,6 @@ const TableView = (props: ITableViewProps) => {
     props.loadUsers()
   }, [])
 
-  const RenderListOfUsers = () => {
-    return (
-      <>
-        {
-          props.users.map(({ id, name, age, aboutPerson }: IUserData) =>
-            <RowOfUser
-              key={uniqId()}
-              id={id}
-              name={name}
-              age={age}
-              aboutPerson={aboutPerson}
-              deleteUser={props.deleteUser}
-              updateUser={props.updateUser}
-              editUser={props.editUser}
-              action={props.action}
-            />
-          )
-        }
-      </>
-    )
-  }
-
   const RenderTable = () => {
     return (
       <Wrapper>
@@ -57,6 +36,26 @@ const TableView = (props: ITableViewProps) => {
           <RenderListOfUsers />
         </Table>
       </Wrapper>
+    )
+  }
+
+  const RenderListOfUsers = () => {
+    return (
+      <>
+        {
+          props.users.map(({ id, name, age, aboutPerson }: IUserData) =>
+            <RowOfUser
+              key={uniqId()}
+              user={{id, name, age, aboutPerson}}
+              deleteUser={props.deleteUser}
+              updateUser={props.updateUser}
+              editUser={props.editUser}
+              action={props.action}
+              getDefault={props.getDefault}
+            />
+          )
+        }
+      </>
     )
   }
 
@@ -72,7 +71,7 @@ const mapStateToProps = (state: IStoreState) =>
   ({ users: state.users, message: state.message, action: state.action });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators({ loadUsers, addUser, deleteUser, editUser, updateUser },
+  bindActionCreators({ loadUsers, addUser, deleteUser, editUser, updateUser, getDefault },
   dispatch);
 
 export const TableController = connect(mapStateToProps, mapDispatchToProps)(TableView);
